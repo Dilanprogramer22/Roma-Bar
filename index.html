@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roma Bar | Cócteles en Soacha</title>
+  <meta name="description" content="Carta de cócteles y bebidas de Roma Bar, en Soacha, Colombia. Pide por WhatsApp.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#menu">Ir a la carta</a>
+
+  <!-- ============ ENCABEZADO ============ -->
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="brand" href="#top" aria-label="Roma Bar, inicio">
+        <!--
+          LOGO: la ruta del logo NO se cambia aquí.
+          Cámbiala en js/app.js, en CONFIG.logo (por defecto: assets/img/logo.png).
+          Se usa en el encabezado y en la portada.
+        -->
+        <img class="bar-logo" alt="" width="44" height="44">
+        <span class="brand-name">Roma Bar</span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#menu">Carta</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ PORTADA ============ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1>Roma Bar</h1>
+          <p class="lead">Cócteles y bebidas de la casa, en Soacha. Mira la carta y haz tu pedido por WhatsApp.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#menu">Ver la carta</a>
+            <!-- El enlace de WhatsApp se genera en js/app.js (CONFIG.whatsappNumber y CONFIG.whatsappMessage) -->
+            <a class="btn" data-whatsapp href="#">Pedir por WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="hero-arch">
+          <div class="hero-arch-inner">
+            <img class="bar-logo" alt="Logo de Roma Bar">
+            <span class="logo-fallback" hidden aria-hidden="true">R</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CARTA ============ -->
+    <section id="menu" class="menu">
+      <div class="wrap">
+        <h2>Carta</h2>
+        <p class="menu-note">Precios en pesos colombianos.</p>
+
+        <!-- Panel del administrador (solo visible después de iniciar sesión) -->
+        <section id="admin-panel" class="admin-panel" hidden aria-labelledby="admin-title">
+          <h3 id="admin-title">Panel de administración</h3>
+          <p class="hint">Los cambios se guardan solo en este navegador. Para que todos los visitantes vean un producto, agrégalo en la lista <code>DEFAULT_PRODUCTS</code> de <code>js/app.js</code>.</p>
+
+          <form id="add-form" class="admin-form">
+            <div class="field">
+              <label for="f-name">Nombre</label>
+              <input id="f-name" type="text" maxlength="60" required>
+            </div>
+            <div class="field">
+              <label for="f-price">Precio en pesos (COP)</label>
+              <input id="f-price" type="number" min="0" step="500" inputmode="numeric" required>
+            </div>
+            <div class="field field-wide">
+              <label for="f-desc">Descripción o ingredientes</label>
+              <textarea id="f-desc" rows="3" maxlength="200"></textarea>
+            </div>
+            <div class="field">
+              <label for="f-img">Ruta de la imagen</label>
+              <input id="f-img" type="text" placeholder="assets/img/coctel7.jpg">
+            </div>
+            <div class="field">
+              <label for="f-file">O sube una foto</label>
+              <input id="f-file" type="file" accept="image/*">
+            </div>
+            <div class="admin-actions field-wide">
+              <button class="btn btn-primary" type="submit">Agregar a la carta</button>
+              <button class="btn" type="button" id="reset-menu">Restaurar carta original</button>
+            </div>
+          </form>
+          <p id="admin-status" class="form-status" role="status"></p>
+        </section>
+
+        <ul id="menu-grid" class="menu-grid"></ul>
+        <p id="menu-empty" class="menu-empty" hidden>La carta está vacía. Inicia sesión como administrador para agregar el primer cóctel.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ PIE DE PÁGINA ============ -->
+  <footer id="contacto" class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h2 class="footer-title">Roma Bar</h2>
+        <!-- CAMBIAR AQUÍ: nombre del propietario -->
+        <p>Propietario: Juan David</p>
+        <!-- CAMBIAR AQUÍ: dirección -->
+        <p>Dirección: Soacha, Colombia</p>
+      </div>
+      <div>
+        <h2 class="footer-title">Pedidos y reservas</h2>
+        <p>Escríbenos por WhatsApp y te respondemos.</p>
+        <!-- CAMBIAR el número y el mensaje en js/app.js (CONFIG.whatsappNumber y CONFIG.whatsappMessage) -->
+        <a class="btn btn-primary" data-whatsapp href="#">Escribir por WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="wrap footer-legal">
+      <p>El exceso de alcohol es perjudicial para la salud. Prohibida la venta de alcohol a menores de 18 años.</p>
+      <p>&copy; <span id="year"></span> Roma Bar</p>
+      <button id="admin-toggle" class="link-btn" type="button">Acceso administrador</button>
+    </div>
+  </footer>
+
+  <!-- ============ VERIFICACIÓN DE EDAD ============ -->
+  <dialog id="age-dialog" aria-labelledby="age-title">
+    <div class="dialog-body" id="age-question">
+      <h2 id="age-title" tabindex="-1">¿Eres mayor de 18 años?</h2>
+      <p>En Roma Bar servimos bebidas alcohólicas. Para ver la carta, confirma tu edad.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-primary" id="age-yes" type="button">Sí, soy mayor</button>
+        <button class="btn" id="age-no" type="button">No</button>
+      </div>
+    </div>
+    <div class="dialog-body" id="age-denied" hidden>
+      <h2 id="age-denied-title" tabindex="-1">Todavía no puedes entrar</h2>
+      <p>Esta página es solo para mayores de 18 años. Vuelve cuando cumplas la mayoría de edad.</p>
+    </div>
+  </dialog>
+
+  <!-- ============ ACCESO ADMINISTRADOR ============ -->
+  <dialog id="login-dialog" aria-labelledby="login-title">
+    <form id="login-form" class="dialog-body">
+      <h2 id="login-title">Acceso administrador</h2>
+      <div class="field">
+        <label for="admin-pass">Contraseña</label>
+        <input id="admin-pass" type="password" autocomplete="current-password" required>
+      </div>
+      <p id="login-error" class="form-error" role="alert" hidden>Contraseña incorrecta. Inténtalo de nuevo.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-primary" type="submit">Entrar</button>
+        <button class="btn" type="button" data-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
